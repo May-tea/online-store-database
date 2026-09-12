@@ -29,7 +29,7 @@ SELECT name, price, stock
 FROM products
 WHERE
     price < 100
-    or stock > 40;
+    OR stock > 40;
 
 SELECT category_id, name, price
 FROM products
