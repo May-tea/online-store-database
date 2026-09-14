@@ -1,22 +1,51 @@
--- Basic SELECT queries
+-- =========================================
+-- Basic SELECT & Aggregation Queries
+-- File: sql/03_queries.sql
+-- =========================================
 
-SELECT name, price, stock FROM products;
+SELECT
+    p.name AS product_name,
+    s.name AS seller_name,
+    ps.price,
+    ps.stock
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id;
 
-SELECT name, price FROM products WHERE price > 100;
-
-SELECT name, stock FROM products WHERE stock > 20;
-
-SELECT name, price FROM products WHERE price > 30 AND price < 100;
-
-SELECT name, price FROM products ORDER BY price DESC;
-
-SELECT name, price
-FROM products
+SELECT p.name AS product_name, s.name AS seller_name, ps.price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
 WHERE
-    price > 30
-ORDER BY price DESC;
+    ps.price > 100
+ORDER BY ps.price DESC;
 
-SELECT name, price FROM products ORDER BY price DESC LIMIT 3;
+SELECT p.name AS product_name, s.name AS seller_name, ps.stock
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
+WHERE
+    ps.stock > 15;
+
+SELECT p.name AS product_name, s.name AS seller_name, ps.price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
+WHERE
+    ps.price BETWEEN 30 AND 100
+ORDER BY ps.price ASC;
+
+SELECT p.name AS product_name, s.name AS seller_name, ps.price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
+ORDER BY ps.price DESC
+LIMIT 3;
 
 SELECT DISTINCT category_id FROM products;
 
@@ -25,50 +54,71 @@ FROM products
 WHERE
     category_id IN (1, 3, 5);
 
-SELECT name, price, stock
-FROM products
+SELECT
+    p.name AS product_name,
+    s.name AS seller_name,
+    ps.price,
+    ps.stock
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
 WHERE
-    price < 100
-    OR stock > 40;
+    ps.price < 100
+    OR ps.stock > 10
 
-SELECT category_id, name, price
-FROM products
+SELECT
+    p.category_id,
+    p.name AS product_name,
+    s.name AS seller_name,
+    ps.price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
 WHERE
-    category_id IN (1, 3, 5)
-    AND price > 30
-ORDER BY price DESC;
+    p.category_id IN (1, 3, 5)
+    AND ps.price > 30
+ORDER BY ps.price DESC;
 
 SELECT category_id, name
 FROM products
 WHERE
     category_id NOT IN(1, 2);
 
-SELECT name, price
-FROM products
-WHERE
-    price BETWEEN 20 AND 100
-ORDER BY price ASC;
-
-SELECT name, price, stock
-FROM products
-WHERE
-    stock < 15
-    OR price > 500;
-
-SELECT category_id, name, stock
-FROM products
+SELECT p.category_id, p.name AS product_name, ps.stock
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
 WHERE (
-        category_id = 1
-        OR category_id = 2
+        p.category_id = 1
+        OR p.category_id = 2
     )
-    AND stock > 10;
+    AND ps.stock > 10;
 
-SELECT product_id, name, price FROM products WHERE name LIKE 's%';
-
-SELECT product_id, name, price
-FROM products
+SELECT
+    p.product_id,
+    p.name AS product_name,
+    s.name AS seller_name,
+    ps.price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
 WHERE
-    name LIKE '%smart%';
+    p.name LIKE 's%';
+
+SELECT
+    p.product_id,
+    p.name AS product_name,
+    s.name AS seller_name,
+    ps.price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
+WHERE
+    p.name LIKE '%smart%';
 
 SELECT
     payment_id,
@@ -92,15 +142,17 @@ WHERE
 ORDER BY paid_at DESC;
 
 SELECT COUNT(*) AS cheap_products_count
-FROM products
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
 WHERE
-    price < 50;
+    ps.price < 50;
 
 SELECT
     MIN(price) AS min_price,
     MAX(price) AS max_price,
     AVG(price) AS avg_price
-FROM products;
+FROM product_sellers;
 
 SELECT SUM(amount) AS total_paid_amount
 FROM payments
@@ -131,14 +183,16 @@ HAVING
 ORDER BY product_count DESC;
 
 SELECT
-    category_id,
-    AVG(price) AS avg_price,
+    p.category_id,
+    AVG(ps.price) AS avg_price,
     COUNT(*) AS qualifying_products_count
-FROM products
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
 WHERE
-    price > 30
+    ps.price > 30
 GROUP BY
-    category_id
+    p.category_id
 HAVING
-    qualifying_products_count >= 2
+    COUNT(*) >= 2
 ORDER BY avg_price DESC;
