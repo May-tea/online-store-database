@@ -10,13 +10,12 @@
 
 WITH
     category_stats AS (
-        SELECT
-            category_id,
-            COUNT(*) AS product_count,
-            AVG(price) AS avg_price
-        FROM products
+        SELECT p.category_id, COUNT(*) AS product_count, AVG(ps.price) AS avg_price
+        FROM
+            products p
+            INNER JOIN product_sellers ps ON p.product_id = ps.product_id
         GROUP BY
-            category_id
+            p.category_id
     )
 SELECT c.name AS category_name, cs.product_count, cs.avg_price
 FROM
@@ -57,17 +56,14 @@ ORDER BY cs.total_spent DESC;
 --    Rank products by price within each category
 -- -----------------------------------------
 
-SELECT
-    product_id,
-    category_id,
-    name,
-    price,
-    ROW_NUMBER() OVER (
+SELECT p.product_id, p.category_id, p.name, ps.price, ROW_NUMBER() OVER (
         PARTITION BY
-            category_id
-        ORDER BY price DESC
+            p.category_id
+        ORDER BY ps.price DESC
     ) AS price_rank
-FROM products
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
 ORDER BY category_id, price_rank ASC;
 
 -- -----------------------------------------
@@ -77,12 +73,14 @@ ORDER BY category_id, price_rank ASC;
 
 WITH
     ranked_products AS (
-        SELECT category_id, name, price, DENSE_RANK() OVER (
+        SELECT p.category_id, p.name, ps.price, DENSE_RANK() OVER (
                 PARTITION BY
-                    category_id
-                ORDER BY price DESC
+                    p.category_id
+                ORDER BY ps.price DESC
             ) AS rnk
-        FROM products
+        FROM
+            products p
+            INNER JOIN product_sellers ps ON p.product_id = ps.product_id
     )
 SELECT
     c.name AS category_name,
