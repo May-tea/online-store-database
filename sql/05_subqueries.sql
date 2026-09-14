@@ -8,27 +8,34 @@
 --    Find products whose price is higher than the overall average
 -- -----------------------------------------
 
-SELECT p.name, p.price
-FROM products p
+SELECT p.name AS product_name, s.name AS seller_name, ps.price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
 WHERE
-    p.price > (
-        SELECT AVG(pr.price)
-        FROM products pr
+    ps.price > (
+        SELECT AVG(price)
+        FROM product_sellers
     )
-ORDER BY p.price DESC;
+ORDER BY ps.price DESC;
 
 -- -----------------------------------------
 -- 2) Subquery with IN: products that have been ordered
 --    Find products that appear in at least one order
 -- -----------------------------------------
 
-SELECT p.name, p.price
-FROM products p
+SELECT p.name AS product_name, MIN(ps.price) AS min_price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
 WHERE
     p.product_id IN (
         SELECT oi.product_id
         FROM order_items oi
     )
+GROUP BY
+    p.name
 ORDER BY p.name ASC;
 
 -- -----------------------------------------
@@ -36,26 +43,34 @@ ORDER BY p.name ASC;
 --     Find products that have never been included in any order
 -- -----------------------------------------
 
-SELECT p.product_id, p.name, p.price
-FROM products p
+SELECT p.product_id, p.name AS product_name, MIN(ps.price) AS min_price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
 WHERE
     p.product_id NOT IN(
         SELECT oi.product_id
         FROM order_items oi
     )
-ORDER BY p.price DESC;
+GROUP BY
+    p.product_id,
+    p.name
+ORDER BY min_price DESC;
 
 -- -----------------------------------------
 -- 4) Scalar subquery: most expensive products
 --     Find product(s) with the highest price
 -- -----------------------------------------
 
-SELECT p.product_id, p.name, p.price
-FROM products p
+SELECT p.name AS product_name, s.name AS seller_name, ps.price
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
 WHERE
-    p.price = (
-        SELECT MAX(pr.price)
-        FROM products pr
+    ps.price = (
+        SELECT MAX(price)
+        FROM product_sellers
     )
 ORDER BY p.name ASC;
 
@@ -64,13 +79,20 @@ ORDER BY p.name ASC;
 --    Show product name, price, and total reviews for each product
 -- -----------------------------------------
 
-SELECT p.name, p.price, (
+SELECT
+    p.name AS product_name,
+    MIN(ps.price) AS min_price,
+    (
         SELECT COUNT(*)
         FROM reviews r
         WHERE
             r.product_id = p.product_id
     ) AS review_count
-FROM products p
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+GROUP BY
+    p.name
 ORDER BY review_count DESC;
 
 -- -----------------------------------------
