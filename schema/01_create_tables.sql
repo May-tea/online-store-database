@@ -126,3 +126,10 @@ CREATE TABLE reviews (
     FOREIGN KEY (product_id) REFERENCES products (product_id),
     UNIQUE (customer_id, product_id)
 );
+
+-- Indexes for Performance Optimization
+CREATE INDEX idx_products_name ON products (name);
+
+CREATE INDEX idx_orders_customer_status ON orders (customer_id, status);
+
+CREATE INDEX idx_product_sellers_price ON product_sellers (price);
