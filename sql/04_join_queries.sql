@@ -10,9 +10,14 @@
 SELECT
     c.name AS category_name,
     p.name AS product_name,
-    p.price
-FROM products p
+    MIN(ps.price) AS min_price
+FROM
+    products p
     INNER JOIN categories c ON p.category_id = c.category_id
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+GROUP BY
+    c.name,
+    p.name
 ORDER BY c.name ASC;
 
 -- -----------------------------------------
