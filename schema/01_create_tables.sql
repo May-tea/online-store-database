@@ -35,7 +35,6 @@ CREATE Table products (
     name VARCHAR(100) NOT NULL,
     description VARCHAR(255) NOT NULL,
     price DECIMAL(12, 2) NOT NULL CHECK (price > 0),
-    stock INT NOT NULL CHECK (stock >= 0),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories (category_id)
@@ -83,10 +82,11 @@ CREATE TABLE order_items (
     order_item_id INT PRIMARY KEY AUTO_INCREMENT,
     order_id INT NOT NULL,
     product_id INT NOT NULL,
+    seller_id INT NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
     unit_price DECIMAL(12, 2) NOT NULL CHECK (unit_price > 0),
     FOREIGN KEY (order_id) REFERENCES orders (order_id),
-    FOREIGN KEY (product_id) REFERENCES products (product_id)
+    FOREIGN KEY (product_id, seller_id) REFERENCES product_sellers (product_id, seller_id)
 );
 
 CREATE TABLE payments (

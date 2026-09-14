@@ -116,78 +116,67 @@ INSERT INTO
         category_id,
         name,
         description,
-        price,
-        stock
+        price
     )
 VALUES (
         1,
         'Wireless Headphones',
         'Noise cancelling wireless headphones',
-        89.99,
-        25
+        89.99
     ),
     (
         1,
         'Smart Watch',
         'Fitness and health tracking smartwatch',
-        129.99,
-        18
+        129.99
     ),
     (
         2,
         'Lenovo ThinkPad E14',
         '14 inch business laptop',
-        749.99,
-        10
+        749.99
     ),
     (
         2,
         'ASUS VivoBook 15',
         '15 inch everyday laptop',
-        649.99,
-        12
+        649.99
     ),
     (
         3,
         'Samsung Galaxy A55',
         'Mid-range Android smartphone',
-        399.99,
-        20
+        399.99
     ),
     (
         3,
         'Xiaomi Redmi Note 13',
         'Affordable Android smartphone',
-        249.99,
-        30
+        249.99
     ),
     (
         4,
         'Clean Code',
         'A handbook of agile software craftsmanship',
-        35.99,
-        15
+        35.99
     ),
     (
         4,
         'Python Crash Course',
         'Beginner-friendly Python programming book',
-        29.99,
-        22
+        29.99
     ),
     (
         5,
         'Wireless Mouse',
         'Ergonomic wireless computer mouse',
-        24.99,
-        40
+        24.99
     ),
     (
         5,
         'USB-C Hub',
         'Multi-port USB-C adapter',
-        39.99,
-        35
+        39.99
     );
 
 INSERT INTO
@@ -257,15 +246,16 @@ INSERT INTO
     order_items (
         order_id,
         product_id,
+        seller_id,
         quantity,
         unit_price
     )
-VALUES (1, 1, 1, 84.99),
-    (1, 2, 1, 129.99),
-    (2, 3, 1, 749.99),
-    (3, 5, 1, 399.99),
-    (4, 4, 1, 649.99),
-    (5, 1, 1, 89.99);
+VALUES (1, 1, 1, 1, 84.99),
+    (1, 2, 2, 1, 129.99),
+    (2, 3, 3, 1, 749.99),
+    (3, 5, 4, 1, 399.99),
+    (4, 4, 3, 1, 649.99),
+    (5, 1, 1, 1, 89.99);
 
 INSERT INTO
     payments (
