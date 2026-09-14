@@ -34,7 +34,6 @@ CREATE Table products (
     category_id INT NOT NULL,
     name VARCHAR(100) NOT NULL,
     description VARCHAR(255) NOT NULL,
-    price DECIMAL(12, 2) NOT NULL CHECK (price > 0),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories (category_id)

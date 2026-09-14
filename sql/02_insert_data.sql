@@ -115,68 +115,57 @@ INSERT INTO
     products (
         category_id,
         name,
-        description,
-        price
+        description
     )
 VALUES (
         1,
         'Wireless Headphones',
-        'Noise cancelling wireless headphones',
-        89.99
+        'Noise cancelling wireless headphones'
     ),
     (
         1,
         'Smart Watch',
-        'Fitness and health tracking smartwatch',
-        129.99
+        'Fitness and health tracking smartwatch'
     ),
     (
         2,
         'Lenovo ThinkPad E14',
-        '14 inch business laptop',
-        749.99
+        '14 inch business laptop'
     ),
     (
         2,
         'ASUS VivoBook 15',
-        '15 inch everyday laptop',
-        649.99
+        '15 inch everyday laptop'
     ),
     (
         3,
         'Samsung Galaxy A55',
-        'Mid-range Android smartphone',
-        399.99
+        'Mid-range Android smartphone'
     ),
     (
         3,
         'Xiaomi Redmi Note 13',
-        'Affordable Android smartphone',
-        249.99
+        'Affordable Android smartphone'
     ),
     (
         4,
         'Clean Code',
-        'A handbook of agile software craftsmanship',
-        35.99
+        'A handbook of agile software craftsmanship'
     ),
     (
         4,
         'Python Crash Course',
-        'Beginner-friendly Python programming book',
-        29.99
+        'Beginner-friendly Python programming book'
     ),
     (
         5,
         'Wireless Mouse',
-        'Ergonomic wireless computer mouse',
-        24.99
+        'Ergonomic wireless computer mouse'
     ),
     (
         5,
         'USB-C Hub',
-        'Multi-port USB-C adapter',
-        39.99
+        'Multi-port USB-C adapter'
     );
 
 INSERT INTO
@@ -250,8 +239,8 @@ INSERT INTO
         quantity,
         unit_price
     )
-VALUES (1, 1, 1, 1, 84.99),
-    (1, 2, 2, 1, 129.99),
+VALUES (1, 1, 1, 1, 89.99),
+    (1, 2, 2, 1, 124.99),
     (2, 3, 3, 1, 749.99),
     (3, 5, 4, 1, 399.99),
     (4, 4, 3, 1, 649.99),
