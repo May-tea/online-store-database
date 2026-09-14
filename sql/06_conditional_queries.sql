@@ -9,15 +9,19 @@
 -- -----------------------------------------
 
 SELECT
-    name,
-    price,
+    p.name AS product_name,
+    s.name AS seller_name,
+    ps.price,
     CASE
-        WHEN price >= 300 THEN 'Premium'
-        WHEN price >= 100 THEN 'Mid-Range'
+        WHEN ps.price >= 300 THEN 'Premium'
+        WHEN ps.price >= 100 THEN 'Mid-Range'
         ELSE 'Budget'
     END AS price_tier
-FROM products
-ORDER BY price DESC;
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
+ORDER BY ps.price DESC;
 
 -- -----------------------------------------
 -- 2) CASE Expression: stock status labels
@@ -25,15 +29,19 @@ ORDER BY price DESC;
 -- -----------------------------------------
 
 SELECT
-    name,
-    stock,
+    p.name AS product_name,
+    s.name AS seller_name,
+    ps.stock,
     CASE
-        WHEN stock = 0 THEN 'Out of Stock'
-        WHEN stock < 15 THEN 'Low Stock'
+        WHEN ps.stock = 0 THEN 'Out of Stock'
+        WHEN ps.stock < 15 THEN 'Low Stock'
         ELSE 'In Stock'
     END AS stock_status
-FROM products
-ORDER BY stock ASC;
+FROM
+    products p
+    INNER JOIN product_sellers ps ON p.product_id = ps.product_id
+    INNER JOIN sellers s ON ps.seller_id = s.seller_id
+ORDER BY ps.stock ASC;
 
 -- -----------------------------------------
 -- 3) COALESCE: fallback for NULL values
